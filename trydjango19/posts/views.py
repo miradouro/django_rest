@@ -1,5 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from .forms import PostForm
 
@@ -15,8 +16,8 @@ def post_index(request):
     return render(request, "index.html", context)
 
 
-def post_detail(request, abc):
-    instance = get_object_or_404(Post, id=abc)
+def post_detail(request, id):
+    instance = get_object_or_404(Post, id=id)
     context = {
             "title": instance.title,
             "instance": instance
@@ -38,8 +39,10 @@ def post_create(request):
     form = PostForm(request.POST or None)
     if form.is_valid():
         instance = form.save(commit=False)
-
         instance.save()
+        messages.success(request, "Criado com sucesso!!!")
+        return HttpResponseRedirect("/posts/create/")
+
     """if request.method == "POST":
         print(request.POST.get("title"))
         title = request.POST.get("content")
@@ -50,12 +53,29 @@ def post_create(request):
     return render(request, "post_form.html", context)
 
 
-def post_update(request):
-    return HttpResponse("<h1>UPDATE</h1>")
+def post_update(request, id=None):
+    instance = get_object_or_404(Post, id=id)
+    form = PostForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        messages.success(request, "Alterado com sucesso!!!")
+        return HttpResponseRedirect(instance.get_absolute_url())
+
+    context = {
+            "title": instance.title,
+            "instance": instance,
+            "form": form,
+        }
+    return render(request, "post_form.html", context)
 
 
-def post_delete(request):
-    return HttpResponse("<h1>DELETE</h1>")
+def post_delete(request, id=None):
+    instance = get_object_or_404(Post, id=id)
+    instance.delete()
+    messages.success(request, "Deletado com sucesso!!!")
+    return HttpResponseRedirect("/posts/")
+    #return redirect("posts:index")
 
 
 

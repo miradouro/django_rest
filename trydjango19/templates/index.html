@@ -5,18 +5,30 @@
     <title>titulo</title>
 </head>
 <body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
     <h1>{{ title }} esta funcionando!</h1>
     <br>
     <a href="/posts/create/">Criar</a>
     <br><br><br>
         {% for obj in object_list %}
+
         /posts/id/
-        {% url "detail" abc=obj.id %}
-        <a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a></br>
+        {% url "detail" id=obj.id %}
+        </br><a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a>
+        {{ obj.id }}</br>
         {{ obj.content }}</br>
         {{ obj.timestamp }}</br>
-        {{ obj.update }}</br>
-        {{ obj.id }}</br>
+        {{ obj.update }}
+        <a href='/posts/{{ obj.id }}/edit/'>editar</a>
+        <a href='/posts/{{ obj.id }}/delete/'>Deletar</a></br></br></br>
 
         {% endfor %}
 
