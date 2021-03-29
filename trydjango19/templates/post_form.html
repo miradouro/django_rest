@@ -1,21 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-
-    <h1>Form</h1>
+    -<h1>Form</h1>
 
     <form method="POST" action="">{% csrf_token %}
 
@@ -23,13 +9,8 @@
 
     <input type="submit" value="Create Post" />
     </form>
-    <?php
-        if(isset($_POST['Submit']))
-        {
-        header("Location: /posts/create/");
-        }
-    ?>
+
     <br><br><br>
     <a href="/posts/">Voltar</a>
-</body>
-</html>
+
+{% endblock content %}

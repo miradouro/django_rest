@@ -13,7 +13,7 @@ def post_index(request):
         "object_list": queryset,
         "title": "Index"
     }
-    return render(request, "index.html", context)
+    return render(request, "post_list.html", context)
 
 
 def post_detail(request, id):
@@ -31,7 +31,7 @@ def post_list(request):
             "object_list": queryset,
             "title": "List"
         }
-    return render(request, "index.html", context)"""
+    return render(request, "post_list.html", context)"""
     return HttpResponse("<h1>LIST</h1>")
 
 
