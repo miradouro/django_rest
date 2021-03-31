@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 
-    -<h1>Form</h1>
+    <h1>Form</h1>
 
-    <form method="POST" action="">{% csrf_token %}
+    <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
 
     {{ form.as_p }}
 
-    <input type="submit" value="Create Post" />
+    <input type="submit" value="Create Post" class="btn btn-primary" />
     </form>
 
     <br><br><br>
-    <a href="/posts/">Voltar</a>
+    <a href="/posts/"  class="btn btn-primary">Voltar</a>
 
 {% endblock content %}

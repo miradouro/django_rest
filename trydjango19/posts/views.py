@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Post
 from .forms import PostForm
 
@@ -8,7 +9,17 @@ from .forms import PostForm
 
 
 def post_index(request):
-    queryset = Post.objects.all()
+    queryset_list = Post.objects.all().order_by("-timestamp")
+    paginator = Paginator(queryset_list, 4)
+
+    page = request.GET.get('abc')
+    try:
+        queryset = paginator.page(page)
+    except PageNotAnInteger:
+        queryset = paginator.page(1)
+    except EmptyPage:
+        queryset = paginator.page(paginator.num_pages)
+
     context = {
         "object_list": queryset,
         "title": "Index"
@@ -26,17 +37,16 @@ def post_detail(request, id):
 
 
 def post_list(request):
-    """queryset = Post.objects.all()
+    queryset = Post.objects.all()
     context = {
-            "object_list": queryset,
-            "title": "List"
-        }
-    return render(request, "post_list.html", context)"""
-    return HttpResponse("<h1>LIST</h1>")
+        "object_list": queryset,
+        "title": "Index"
+    }
+    return render(request, "post_list.html", context)
 
 
 def post_create(request):
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -55,7 +65,7 @@ def post_create(request):
 
 def post_update(request, id=None):
     instance = get_object_or_404(Post, id=id)
-    form = PostForm(request.POST or None, instance=instance)
+    form = PostForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()

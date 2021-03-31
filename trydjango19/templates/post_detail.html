@@ -3,15 +3,18 @@
 {% block head_title %}Detalhes id:{{ instance.id }}{% endblock head_title %}
 
 {% block content %}
+<div class="img-thumbnail">
+    <div class='col-sm-16 col-sm-offset-3'>
 
-    <h1>{{ title }}</h1>
+        <h1>{{ title }} <small>{{ instance.timestamp }}</small></h1>
 
-    {{ instance.id }}</br>
-    {{ instance.title }}</br>
-    {{ instance.content }}</br>
-    {{ instance.timestamp }}</br>
-    {{ instance.update }}</br>
+        {% if instance.image %}
+            <img src="{{ instance.image.url }}" class="img-responsive"/>
+        {% endif %}
 
-    <a href="/posts/">Voltar</a></br>
+        {{ instance.content|linebreaks }}</br>
 
+        <a href="/posts/"  class="btn btn-primary">Voltar</a></br>
+    </div>
+</div>
 {% endblock content %}
